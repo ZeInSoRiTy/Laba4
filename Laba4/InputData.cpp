@@ -6,6 +6,10 @@
 
 double getInput(const std::string& inputType) {
 
+	setlocale(LC_ALL, "ru");
+	std::setlocale(LC_NUMERIC, "C");
+
+
 	while (true) {
 
 		std::cout << inputMsg(inputType);
