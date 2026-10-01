@@ -2,12 +2,17 @@
 //
 #include "inputData.h"
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <string>
 #include <format>
+#include <limits>
+#include <algorithm>
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <regex>
-#include <format>
 #include <chrono>
 
 double recurrentFunc(double x, double eps) {
@@ -31,6 +36,10 @@ double recurrentFunc(double x, double eps) {
         double nextTerm = (-prevTerm * pow(x, 2.0) * (pow(9.0, n + 1.0) - 1.0)) / ((pow(9.0, n) - 1.0) * (2.0 * n + 2.0) * (2.0 * n + 3.0));
 
         double nextSum = recurSum + nextTerm;
+
+        if (!std::isfinite(nextTerm) || !std::isfinite(nextSum)) {
+            break;
+        }
 
         if (std::abs(nextSum - recurSum) < eps) {
             recurSum = nextSum;
@@ -115,31 +124,49 @@ int main()
     eps = getInput("epsilon");
 
 
-	switch (calcMode) {
+    switch (calcMode) {
     case 1:
-
+    {
         std::cout << "Таблица №1. Расчёт для разных X" << std::endl;
-        std::cout << std::string(43, '—') << std::endl;
-        std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", "x", "f(x)", "F(x)", "ΔX") << std::endl; // Форматирование шапки таблицы и значений
-        std::cout << std::string(43, '—') << std::endl;
-        
-        for (double x = xStart; (xDelta > 0) ? (x <= xEnd) : (x >= xEnd); x += xDelta) {
+        std::cout << std::string(43, '-') << std::endl;
+        std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", "x", "f(x)", "F(x)", "delt") << std::endl; // Форматирование шапки таблицы и значений
+        std::cout << std::string(43, '-') << std::endl;
+
+        const double toler = 100.0 * std::numeric_limits<double>::epsilon() * std::max({ 1.0, std::abs(xStart), std::abs(xEnd) });
+
+        for (long long index = 0;; ++index) {
+            const double x = xStart + static_cast<double>(index) * xDelta;
+
+            if (xDelta > 0.0) {
+                if (x > xEnd + toler) {
+                    break;
+                }
+            }
+            else {
+                if (x < xEnd - toler) {
+                    break;
+                }
+            }
 
             double FLib = pow(sin(x), 3);
-			double FRecur = recurrentFunc(x, eps);
+            double FRecur = recurrentFunc(x, eps);
             double delta = std::sqrt(std::abs((pow(FRecur, 2) - pow(FLib, 2))));
 
             std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", x, FRecur, FLib, delta) << std::endl; // Форматирование шапки таблицы и значений
-            std::cout << std::string(43, '—') << std::endl;
+            std::cout << std::string(43, '-') << std::endl;
 
             // Вызов функции для расчета по диапазону X
         }
 
+        break;
+    }
+
     case 2:
-		// Вызов функции для расчета по диапазону ε
-		break;
+        // Вызов функции для расчета по диапазону ε
+        break;
 
-
+    }
+    return 0;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
