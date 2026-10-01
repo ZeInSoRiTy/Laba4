@@ -1,6 +1,4 @@
-﻿// Laba4.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
-#include "inputData.h"
+﻿#include "inputData.h"
 #include <iostream>
 #include <cmath>
 #include <string>
@@ -48,6 +46,10 @@ double recurrentFunc(double x, double eps) {
             break;
         }
 
+        if (n >= 1000001) {
+            break;
+        }
+
         recurSum = nextSum;
 		prevTerm = nextTerm;
         ++n;
@@ -58,15 +60,8 @@ double recurrentFunc(double x, double eps) {
 
 struct TableRow {
     std::string x;
-    std::string seriesValue;
-    std::string libraryValue;
-    std::string delta;
-};
-
-struct EpsilonTableRow {
-    std::string epsilon;
-    std::string seriesValue;
-    std::string libraryValue;
+    std::string recurValue;
+    std::string libValue;
     std::string delta;
 };
 
@@ -84,10 +79,10 @@ void printTable(const std::string& title, const std::array<std::string, 4>& head
                 value = &row.x;
             }
             else if (column == 1) {
-                value = &row.seriesValue;
+                value = &row.recurValue;
             }
             else if (column == 2) {
-                value = &row.libraryValue;
+                value = &row.libValue;
             }
             else {
                 value = &row.delta;
@@ -122,7 +117,7 @@ void printTable(const std::string& title, const std::array<std::string, 4>& head
     printSeparator();
 
     for (const TableRow& row : rows) {
-        printRow({ row.x, row.seriesValue, row.libraryValue, row.delta });
+        printRow({ row.x, row.recurValue, row.libValue, row.delta });
         printSeparator();
     }
 }
@@ -141,7 +136,7 @@ int main()
     double eps;
 
     while (true) {
-        std::cout << "Меню:\n1.Таблица по диапазону X\n2.Таблица по диапазону ε\n\nВаш выбор: ";
+        std::cout << "Меню:\n1.Таблица по диапазону X\n2.Таблица по множеству значений ε\n\nВаш выбор: ";
 
         std::string input;
         if (!std::getline(std::cin, input)) break;
@@ -153,55 +148,54 @@ int main()
         }
 
     }
-    
-    xStart = getInput("xStart");
-    xEnd = getInput("xEnd");
-
-    if (xStart == xEnd) {
-        while (true) {
-            std::cout << "Диапазон значений пуст, пожалуйста введите другое значение xEnd." << std::endl << std::endl;
-            xEnd = getInput("xEnd");
-
-            if (xStart != xEnd) {
-                break;
-            }
-        }
-    }
-
-
-
-    xDelta = getInput("xDelta");
-
-    if (xEnd < xStart && xDelta >= 0) {
-        while (true) {
-            std::cout << "Так как конечный x меньше чем начальный x, шаг должен быть отрицательным. Пожалуйста, введите другое значение ∆X." << std::endl << std::endl;
-            xDelta = getInput("xDelta");
-
-            if (xDelta < 0) {
-                break;
-            }
-        }
-    }
-
-    if (xEnd > xStart && xDelta <= 0) {
-        while (true) {
-            std::cout << "Так как конечный x больше чем начальный x, шаг должен быть положительным. Пожалуйста, введите другое значение ∆X." << std::endl << std::endl;
-            xDelta = getInput("xDelta");
-
-            if (xDelta > 0) {
-                break;
-            }
-        }
-    }
-
-    eps = getInput("epsilon");
-
 
     switch (calcMode) {
     case 1:
     {
 
-        const std::array<std::string, 4> headers{"x", "f(x)", "F(x)", "delta"};
+        xStart = getInput("xStart");
+        xEnd = getInput("xEnd");
+
+        if (xStart == xEnd) {
+            while (true) {
+                std::cout << "Диапазон значений пуст, пожалуйста введите другое значение xEnd." << std::endl << std::endl;
+                xEnd = getInput("xEnd");
+
+                if (xStart != xEnd) {
+                    break;
+                }
+            }
+        }
+
+
+
+        xDelta = getInput("xDelta");
+
+        if (xEnd < xStart && xDelta >= 0) {
+            while (true) {
+                std::cout << "Так как конечный x меньше чем начальный x, шаг должен быть отрицательным. Пожалуйста, введите другое значение ∆X." << std::endl << std::endl;
+                xDelta = getInput("xDelta");
+
+                if (xDelta < 0) {
+                    break;
+                }
+            }
+        }
+
+        if (xEnd > xStart && xDelta <= 0) {
+            while (true) {
+                std::cout << "Так как конечный x больше чем начальный x, шаг должен быть положительным. Пожалуйста, введите другое значение ∆X." << std::endl << std::endl;
+                xDelta = getInput("xDelta");
+
+                if (xDelta > 0) {
+                    break;
+                }
+            }
+        }
+
+        eps = getInput("epsilon");
+
+        const std::array<std::string, 4> headers{ "x", "f(x)", "F(x)", "delta" };
 
         const double toler = 100.0 * std::numeric_limits<double>::epsilon() * std::max({ 1.0, std::abs(xStart), std::abs(xEnd) });
         std::vector<TableRow> rows;
@@ -224,16 +218,16 @@ int main()
                 }
             }
 
-            double FLib = pow(sin(x), 3);
+            double FLib = std::pow(std::sin(x), 3);
             double FRecur = recurrentFunc(x, eps);
-            double delta = std::sqrt(std::abs((pow(FRecur, 2) - pow(FLib, 2))));
+            double delta = std::sqrt(std::abs((pow(FRecur, 2) - std::pow(FLib, 2))));
 
             rows.push_back({
                 std::format("{}", x),
                 std::format("{}", FRecur),
                 std::format("{}", FLib),
                 std::format("{}", delta)
-            });
+                });
         }
 
         printTable("Таблица №1. Расчёт для разных X", headers, rows);
@@ -252,7 +246,7 @@ int main()
         double FLib = pow(sin(xIdeal), 3);
 
         std::vector<TableRow> rows;
-        
+
         for (int power = 1; power <= 7; ++power) {
             const double currentEpsilon =
                 std::pow(10.0, -power);
@@ -260,19 +254,21 @@ int main()
             const double FRecur =
                 recurrentFunc(xIdeal, currentEpsilon);
 
-            double delta = std::sqrt(std::abs((pow(FRecur, 2) - pow(FLib, 2))));
+            double delta = std::sqrt(std::abs((std::pow(FRecur, 2) - std::pow(FLib, 2))));
 
             rows.push_back({
-                std::format("{}", currentEpsilon),
+                std::format("{:.{}f}", currentEpsilon, power),
                 std::format("{}", FRecur),
                 std::format("{}", FLib),
                 std::format("{}", delta)
                 });
         }
 
-        printTable("Таблица №2. Расчёт для разных значений epsilon", headers, rows);
+        printTable("Таблица №2. Расчёт для разных значений ε", headers, rows);
 
         break;
+
+    }
 
     }
     return 0;

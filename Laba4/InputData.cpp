@@ -42,7 +42,7 @@ double getInput(const std::string& inputType) {
 		}
 		return res;
 	}
-
+	return 0;
 }
 
 std::string inputMsg(const std::string& inputType) {
