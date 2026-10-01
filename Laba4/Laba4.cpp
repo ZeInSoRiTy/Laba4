@@ -5,6 +5,8 @@
 #include <cmath>
 #include <string>
 #include <format>
+#include <array>
+#include <vector>
 #include <limits>
 #include <algorithm>
 #ifndef NOMINMAX
@@ -52,6 +54,77 @@ double recurrentFunc(double x, double eps) {
     }
 
     return recurSum;
+}
+
+struct TableRow {
+    std::string x;
+    std::string seriesValue;
+    std::string libraryValue;
+    std::string delta;
+};
+
+struct EpsilonTableRow {
+    std::string epsilon;
+    std::string seriesValue;
+    std::string libraryValue;
+    std::string delta;
+};
+
+
+void printTable(const std::string& title, const std::array<std::string, 4>& headers, const std::vector<TableRow>& rows) {
+    std::array<std::size_t, 4> widths{};
+
+    for (std::size_t column = 0; column < headers.size(); ++column) {
+        widths[column] = headers[column].length();
+
+        for (const TableRow& row : rows) {
+            const std::string* value = nullptr;
+
+            if (column == 0) {
+                value = &row.x;
+            }
+            else if (column == 1) {
+                value = &row.seriesValue;
+            }
+            else if (column == 2) {
+                value = &row.libraryValue;
+            }
+            else {
+                value = &row.delta;
+            }
+
+            widths[column] = std::max(widths[column], value->length());
+        }
+    }
+
+    std::size_t tableWidth = 1;
+    for (std::size_t width : widths) {
+        tableWidth += width + 3;
+    }
+
+    const auto printSeparator = [&]() {
+        std::cout << std::string(tableWidth, '-') << std::endl;
+    };
+
+    const auto printRow = [&](const std::array<std::string, 4>& row) {
+        std::cout << "|";
+
+        for (std::size_t column = 0; column < row.size(); ++column) {
+            std::cout << std::format(" {:>{}} |", row[column], widths[column]);
+        }
+
+        std::cout << std::endl;
+    };
+
+    std::cout << title << std::endl;
+    printSeparator();
+    printRow(headers);
+    printSeparator();
+
+    for (const TableRow& row : rows) {
+        printRow({ row.x, row.seriesValue, row.libraryValue, row.delta });
+        printSeparator();
+    }
 }
 
 int main()
@@ -127,12 +200,11 @@ int main()
     switch (calcMode) {
     case 1:
     {
-        std::cout << "Таблица №1. Расчёт для разных X" << std::endl;
-        std::cout << std::string(43, '-') << std::endl;
-        std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", "x", "f(x)", "F(x)", "delt") << std::endl; // Форматирование шапки таблицы и значений
-        std::cout << std::string(43, '-') << std::endl;
+
+        const std::array<std::string, 4> headers{"x", "f(x)", "F(x)", "delta"};
 
         const double toler = 100.0 * std::numeric_limits<double>::epsilon() * std::max({ 1.0, std::abs(xStart), std::abs(xEnd) });
+        std::vector<TableRow> rows;
 
         for (long long index = 0;; ++index) {
             double x = xStart + static_cast<double>(index) * xDelta;
@@ -156,30 +228,52 @@ int main()
             double FRecur = recurrentFunc(x, eps);
             double delta = std::sqrt(std::abs((pow(FRecur, 2) - pow(FLib, 2))));
 
-            std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", x, FRecur, FLib, delta) << std::endl; // Форматирование шапки таблицы и значений
-            std::cout << std::string(43, '-') << std::endl;
-
-            // Вызов функции для расчета по диапазону X
+            rows.push_back({
+                std::format("{}", x),
+                std::format("{}", FRecur),
+                std::format("{}", FLib),
+                std::format("{}", delta)
+            });
         }
+
+        printTable("Таблица №1. Расчёт для разных X", headers, rows);
 
         break;
     }
 
     case 2:
-        // Вызов функции для расчета по диапазону ε
+    {
+
+        const std::array<std::string, 4> headers{
+        "epsilon", "f(x)", "F(x)", "delta"
+        };
+
+        const double xIdeal = getInput("xIdeal");
+        double FLib = pow(sin(xIdeal), 3);
+
+        std::vector<TableRow> rows;
+        
+        for (int power = 1; power <= 7; ++power) {
+            const double currentEpsilon =
+                std::pow(10.0, -power);
+
+            const double FRecur =
+                recurrentFunc(xIdeal, currentEpsilon);
+
+            double delta = std::sqrt(std::abs((pow(FRecur, 2) - pow(FLib, 2))));
+
+            rows.push_back({
+                std::format("{}", currentEpsilon),
+                std::format("{}", FRecur),
+                std::format("{}", FLib),
+                std::format("{}", delta)
+                });
+        }
+
+        printTable("Таблица №2. Расчёт для разных значений epsilon", headers, rows);
+
         break;
 
     }
     return 0;
 }
-
-// Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
-// Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
-
-// Советы по началу работы 
-//   1. В окне обозревателя решений можно добавлять файлы и управлять ими.
-//   2. В окне Team Explorer можно подключиться к системе управления версиями.
-//   3. В окне "Выходные данные" можно просматривать выходные данные сборки и другие сообщения.
-//   4. В окне "Список ошибок" можно просматривать ошибки.
-//   5. Последовательно выберите пункты меню "Проект" > "Добавить новый элемент", чтобы создать файлы кода, или "Проект" > "Добавить существующий элемент", чтобы добавить в проект существующие файлы кода.
-//   6. Чтобы снова открыть этот проект позже, выберите пункты меню "Файл" > "Открыть" > "Проект" и выберите SLN-файл.
