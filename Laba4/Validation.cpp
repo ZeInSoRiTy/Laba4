@@ -1,6 +1,6 @@
 ﻿#include "validation.h"
 #include <regex>
-#include <stdexcept>
+#include <math.h>
 
 ValidationError validate(const std::string& input) {
     if (input.empty()) {

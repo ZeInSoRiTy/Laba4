@@ -39,7 +39,7 @@ double recurrentFunc(double x, double eps) {
         ++n;
     }
 
-
+    return recurSum;
 }
 
 int main()
@@ -114,19 +114,20 @@ int main()
 
 	switch (calcMode) {
     case 1:
+
+        std::cout << "Таблица №1. Расчёт для разных X" << std::endl;
+        std::cout << std::string(43, '—') << std::endl;
+        std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", "x", "f(x)", "F(x)", "ΔX") << std::endl; // Форматирование шапки таблицы и значений
+        std::cout << std::string(43, '—') << std::endl;
         
         for (double x = xStart; (xDelta > 0) ? (x <= xEnd) : (x >= xEnd); x += xDelta) {
 
             double FLib = pow(sin(x), 3);
+			double FRecur = recurrentFunc(x, eps);
+			double delta = std::abs(FLib - FRecur);
 
-            std::cout << "Таблица №1. Расчёт для разных X" << std::endl;
-
-            std::cout << std::string(43, '—') << std::endl;
-            std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", "x", "f(x)", "F(x)", "ΔX") << std::endl; // Форматирование шапки таблицы и значений
-            std::cout << std::string(43, '—') << std::endl;
 
             // Вызов функции для расчета по диапазону X
-            break;
         }
 
     case 2:
