@@ -7,7 +7,40 @@
 #include <format>
 #include <windows.h>
 #include <regex>
+#include <format>
 #include <chrono>
+
+double recurrentFunc(double x, double eps) {
+    //Чтобы вычислить рядную функцию для начала найдем значение первого члена этого ряда a1. 
+    // a1 = 1/4 * (1 * (((3^3 - 3)/3!)*x^3)) = 1/4 * 24/6 * x^3 = x^3
+    //Далее нужно вычислить следующие члены ряда по реккурентной формуле
+    //Для начала нужно вычислить саму формулу
+	//Для этого a_n нужно разделить на a_(n-1) и упростить выражение...
+	//Итоговая формула для вычисления следующего члена ряда будет выглядеть так:
+    //a_(n+1) = -a_n * ((9^(n+1)-1)/((9^n-1)(2n+2)(2n+3))) * x^2
+    
+
+
+	double prevTerm = pow(x, 3);
+	double recurSum = prevTerm;
+
+	int n = 1;
+
+    while (true) {
+
+        double nextTerm = (-prevTerm * pow(x, 2.0) * (pow(9.0, n + 1.0) - 1.0)) / ((pow(9.0, n) - 1.0) * (2.0 * n + 2.0) * (2.0 * n + 3.0));
+
+		if (std::abs(nextTerm) < eps) {
+			break;
+		}
+
+        recurSum += nextTerm;
+		prevTerm = nextTerm;
+        ++n;
+    }
+
+
+}
 
 int main()
 {
@@ -70,7 +103,7 @@ int main()
             std::cout << "Так как конечный x больше чем начальный x, шаг должен быть положительным. Пожалуйста, введите другое значение ∆X." << std::endl << std::endl;
             xDelta = getInput("xDelta");
 
-            if (xDelta < 0) {
+            if (xDelta > 0) {
                 break;
             }
         }
@@ -79,7 +112,26 @@ int main()
     eps = getInput("epsilon");
 
 
-    std::cout << xStart << xEnd << xDelta << eps;
+	switch (calcMode) {
+    case 1:
+        
+        for (double x = xStart; (xDelta > 0) ? (x <= xEnd) : (x >= xEnd); x += xDelta) {
+
+            double FLib = pow(sin(x), 3);
+
+            std::cout << "Таблица №1. Расчёт для разных X" << std::endl;
+
+            std::cout << std::string(43, '—') << std::endl;
+            std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", "x", "f(x)", "F(x)", "ΔX") << std::endl; // Форматирование шапки таблицы и значений
+            std::cout << std::string(43, '—') << std::endl;
+
+            // Вызов функции для расчета по диапазону X
+            break;
+        }
+
+    case 2:
+		// Вызов функции для расчета по диапазону ε
+		break;
 
 
 }

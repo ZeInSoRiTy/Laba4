@@ -151,9 +151,6 @@
     <ClInclude Include="inputData.h" />
     <ClInclude Include="validation.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Laba2\Laba2\Laba2.vcxproj" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
