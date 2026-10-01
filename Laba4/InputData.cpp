@@ -31,6 +31,11 @@ double getInput(const std::string& inputType) {
 		
 		double res = std::stod(input);
 
+		if ((inputType == "xStart" || inputType == "xEnd" || inputType == "xDelta") && res > 10000000) {
+			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
+			continue;
+		}
+
 		if ((inputType == "xDelta") && res == 0) {
 			std::cout << "∆X не может быть равен 0." << std::endl << std::endl;
 			continue;
@@ -61,4 +66,5 @@ std::string inputMsg(const std::string& inputType) {
 	if (inputType == "xIdeal") {
 		return "Введите значение x_ideal: ";
 	}
+	return "Неизвестный тип параметра";
 }

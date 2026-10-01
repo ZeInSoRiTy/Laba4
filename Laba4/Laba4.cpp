@@ -26,14 +26,14 @@ double recurrentFunc(double x, double eps) {
     
 
 
-	double prevTerm = pow(x, 3);
+	double prevTerm = std::pow(x, 3);
 	double recurSum = prevTerm;
 
 	int n = 1;
 
     while (true) {
 
-        double nextTerm = (-prevTerm * pow(x, 2.0) * (pow(9.0, n + 1.0) - 1.0)) / ((pow(9.0, n) - 1.0) * (2.0 * n + 2.0) * (2.0 * n + 3.0));
+        double nextTerm = (-prevTerm * std::pow(x, 2.0) * (std::pow(9.0, n + 1.0) - 1.0)) / ((std::pow(9.0, n) - 1.0) * (2.0 * n + 2.0) * (2.0 * n + 3.0));
 
         double nextSum = recurSum + nextTerm;
 
@@ -146,7 +146,7 @@ int main()
             std::cout << "\n";
             break;
         }
-
+        std::cout << "Неверный выбор. Введите 1 или 2.\n\n";
     }
 
     switch (calcMode) {
@@ -243,7 +243,7 @@ int main()
         };
 
         const double xIdeal = getInput("xIdeal");
-        double FLib = pow(sin(xIdeal), 3);
+        double FLib = std::pow(std::sin(xIdeal), 3);
 
         std::vector<TableRow> rows;
 
