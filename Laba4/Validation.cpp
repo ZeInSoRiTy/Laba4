@@ -1,4 +1,4 @@
-#include "validation.h"
+﻿#include "validation.h"
 #include <regex>
 #include <stdexcept>
 

@@ -1,14 +1,14 @@
-#include "validation.h"
+﻿#include "validation.h"
 #include "inputData.h"
 #include <regex>
 #include <stdexcept>
 #include <iostream>
+#include <Windows.h>
 
 double getInput(const std::string& inputType) {
 
-	setlocale(LC_ALL, "ru");
-	std::setlocale(LC_NUMERIC, "C");
-
+	SetConsoleCP(CP_UTF8);
+	SetConsoleOutputCP(CP_UTF8);
 
 	while (true) {
 
@@ -39,6 +39,6 @@ std::string inputMsg(const std::string& inputType) {
 		return "Введите значение шага ∆X: ";
 	}
 	if (inputType == "epsilon") {
-		return "Введите значение точности eps: ";
+		return "Введите значение точности ε: ";
 	}
 }
