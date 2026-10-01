@@ -139,7 +139,9 @@ int main()
         std::cout << "Меню:\n1.Таблица по диапазону X\n2.Таблица по множеству значений ε\n\nВаш выбор: ";
 
         std::string input;
-        if (!std::getline(std::cin, input)) break;
+        if (!std::getline(std::cin, input)) {
+            std::exit(0);
+        }
 
         if (input == "1" || input == "2") {
             calcMode = std::stoi(input);
@@ -206,6 +208,13 @@ int main()
             if (std::abs(x - xEnd) <= toler) {
                 x = xEnd;
             }
+            
+            const double pointCount = std::abs((xEnd - xStart) / xDelta) + 1.0;
+
+            if (pointCount > 100000) {
+                std::cout << "Слишком много точек для построения таблицы." << std::endl;
+                break;
+            }
 
             if (xDelta > 0.0) {
                 if (x > xEnd + toler) {
@@ -218,9 +227,10 @@ int main()
                 }
             }
 
-            double FLib = std::pow(std::sin(x), 3);
+            double FLib = std::pow(std::sin(x), 3.0);
             double FRecur = recurrentFunc(x, eps);
-            double delta = std::sqrt(std::abs((pow(FRecur, 2) - std::pow(FLib, 2))));
+            double delta = std::sqrt(std::abs((std::pow(FRecur, 2.0) - std::pow(FLib, 2.0))));
+
 
             rows.push_back({
                 std::format("{}", x),
@@ -243,7 +253,7 @@ int main()
         };
 
         const double xIdeal = getInput("xIdeal");
-        double FLib = std::pow(std::sin(xIdeal), 3);
+        double FLib = std::pow(std::sin(xIdeal), 3.0);
 
         std::vector<TableRow> rows;
 
@@ -254,7 +264,7 @@ int main()
             const double FRecur =
                 recurrentFunc(xIdeal, currentEpsilon);
 
-            double delta = std::sqrt(std::abs((std::pow(FRecur, 2) - std::pow(FLib, 2))));
+            double delta = std::sqrt(std::abs((std::pow(FRecur, 2.0) - std::pow(FLib, 2.0))));
 
             rows.push_back({
                 std::format("{:.{}f}", currentEpsilon, power),

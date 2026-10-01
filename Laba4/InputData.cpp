@@ -11,7 +11,10 @@ double getInput(const std::string& inputType) {
 
 		std::cout << inputMsg(inputType);
 		std::string input;
-		if (!std::getline(std::cin, input)) break;
+		if (!std::getline(std::cin, input)) 
+		{
+			std::exit(0);
+		}
 
 		for (char& symbol : input) {
 			if (symbol == ',') {
@@ -31,7 +34,11 @@ double getInput(const std::string& inputType) {
 		
 		double res = std::stod(input);
 
-		if ((inputType == "xStart" || inputType == "xEnd" || inputType == "xDelta") && res > 10000000) {
+		if ((inputType == "xStart" || inputType == "xEnd" || inputType == "xDelta") && std::abs(res) > 10000000) {
+			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
+			continue;
+		}
+		if ((inputType == "xIdeal") && std::abs(res) > 10000) {
 			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
 			continue;
 		}
@@ -47,7 +54,6 @@ double getInput(const std::string& inputType) {
 		}
 		return res;
 	}
-	return 0;
 }
 
 std::string inputMsg(const std::string& inputType) {
