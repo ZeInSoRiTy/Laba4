@@ -135,7 +135,11 @@ int main()
         const double toler = 100.0 * std::numeric_limits<double>::epsilon() * std::max({ 1.0, std::abs(xStart), std::abs(xEnd) });
 
         for (long long index = 0;; ++index) {
-            const double x = xStart + static_cast<double>(index) * xDelta;
+            double x = xStart + static_cast<double>(index) * xDelta;
+
+            if (std::abs(x - xEnd) <= toler) {
+                x = xEnd;
+            }
 
             if (xDelta > 0.0) {
                 if (x > xEnd + toler) {
