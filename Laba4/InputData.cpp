@@ -7,9 +7,6 @@
 
 double getInput(const std::string& inputType) {
 
-	SetConsoleCP(CP_UTF8);
-	SetConsoleOutputCP(CP_UTF8);
-
 	while (true) {
 
 		std::cout << inputMsg(inputType);
