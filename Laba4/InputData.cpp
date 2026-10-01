@@ -13,6 +13,12 @@ double getInput(const std::string& inputType) {
 		std::string input;
 		if (!std::getline(std::cin, input)) break;
 
+		for (char& symbol : input) {
+			if (symbol == ',') {
+				symbol = '.';
+			}
+		}
+
 		std::string validResult = returnValidation(input);
 
 		if (validResult != "Valid") {

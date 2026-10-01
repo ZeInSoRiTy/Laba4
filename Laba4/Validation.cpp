@@ -9,30 +9,30 @@ ValidationError validate(const std::string& input) {
     if (input.back() == '.' || input.back() == ',') {
         return ValidationError::EmptyDot;
     }
-    if (input.find('.') != std::string::npos || input.find(',') != std::string::npos) {
-        return ValidationError::FloatNum;
-    }
-    if (!std::regex_match(input, std::regex(R"(^[+-]?\d+$)"))) {
+    if (!std::regex_match(input, std::regex(R"(^[+-]?\d*[.,]?\d*$)"))) {
         return ValidationError::InvalidChars;
     }
-    if (std::regex_match(input, std::regex(R"(^-0+$)"))) {
+    if (std::regex_match(input, std::regex(R"(^-0+([.,].0+)?$)"))) {
         return ValidationError::NegativeZero;
     }
-    if (std::regex_match(input, std::regex(R"(^\+0+$)"))) {
+    if (std::regex_match(input, std::regex(R"(^\+0+([.,].0+)?$)"))) {
         return ValidationError::PositiveZero;
     }
-    if (std::regex_match(input, std::regex(R"(^[+-]?0\d+$)"))) {
+    if (std::regex_match(input, std::regex(R"(^[+-]?0\d+([.,]\d+)?$)"))) {
         return ValidationError::LeadingZeros;
     }
-    if (!std::regex_match(input, std::regex(R"(^[+-]?(0|[1-9]\d*)$)"))) {
+    if (!std::regex_match(input, std::regex(R"(^[+-]?(0|[1-9]\d*)([.,]\d+)?$)"))) {
         return ValidationError::InvalidChars;
     }
     try {
-        int value = std::stoi(input);
-        (void)value;
-    }
-    catch (const std::out_of_range& e) {
-        return ValidationError::NotInt;
+		double value = std::stod(input);
+		if (!std::isfinite(value)) {
+			return ValidationError::OutOfRange;
+		}
+
+	}
+    catch (const std::out_of_range&) {
+        return ValidationError::OutOfRange;
     }
 
     return ValidationError::None;
@@ -43,21 +43,19 @@ std::string returnValidation(const std::string& input) {
     case ValidationError::None:
         return "Valid";
     case ValidationError::EmptyInput:
-        return "Введена пустая строка. Пожалуйста, не будьте динозавром и введите число в формате <неотрицательное число>";
+        return "Введена пустая строка. Пожалуйста, не будьте динозавром и введите число в формате <число.дробь> или 0";
     case ValidationError::InvalidChars:
-        return "Во вводе присутствуют буквы, специальные символы, пустые пробелы или ввод в целом некорректен.  Пожалуйста, не будьте динозавром и введите целое число в формате <неотрицательное число>";
+        return "Во вводе присутствуют буквы, специальные символы, пустые пробелы или ввод в целом некорректен. Пожалуйста, не будьте динозавром и введите число в формате <число.дробь> или 0";
     case ValidationError::EmptyDot:
-        return "Число не может оканчиваться на точку.  Пожалуйста, не будьте динозавром и введите целое число в формате <неотрицательное число>";
+        return "Число не может оканчиваться на точку. Пожалуйста, не будьте динозавром и введите число в формате <число.дробь> или 0";
     case ValidationError::NegativeZero:
-        return "Введен отрицательный ноль, это недопустимо.  Пожалуйста, не будьте динозавром и введите целое число в формате <неотрицательное число>";
+        return "Введен отрицательный ноль, это недопустимо. Пожалуйста, не будьте динозавром и введите число в формате <число.дробь> или 0";
     case ValidationError::PositiveZero:
-        return "Введен положительный ноль, это недопустимо.  Пожалуйста, не будьте динозавром и введите целое число в формате <неотрицательное число>";
+        return "Введен положительный ноль, это недопустимо. Пожалуйста, не будьте динозавром и введите число в формате <число.дробь> или 0";
     case ValidationError::LeadingZeros:
-        return "Введено число с ведущими нулями.  Пожалуйста, не будьте динозавром и введите целое число в формате <неотрицательное число>";
-    case ValidationError::NotInt:
-        return "Введенное число является слишком большим. Пожалуйста, введите число меньше.";
-    case ValidationError::FloatNum:
-        return "Введенное число не является целым. Пожалуйста, не будьте динозавром и введите целое число в формате <неотрицательное число>";
+        return "Введено число с ведущими нулями. Пожалуйста, не будьте динозавром и введите число в формате <число.дробь> или 0";
+    case ValidationError::OutOfRange:
+		return "Введенное число слишком большое или не является double. Пожалуйста, не будьте динозавром и введите число в формате <число.дробь> или 0";
     }
     return "Неизвестная ошибка. Поздравляю, вы динозавр";
 }

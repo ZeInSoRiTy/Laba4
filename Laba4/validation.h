@@ -9,9 +9,7 @@ enum class ValidationError {
     EmptyDot,
     NegativeZero,
     PositiveZero,
-    FloatNum,
-    NotInt
+    OutOfRange
 };
-
 ValidationError validate(const std::string& input);
 std::string returnValidation(const std::string& input);
