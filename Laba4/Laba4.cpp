@@ -197,15 +197,21 @@ int main()
 
         double pointCount = std::abs((xEnd - xStart) / xDelta) + 1.0;
 
-        if (pointCount > 100000) {
-            std::cout << "Слишком много точек для построения таблицы. Пожалуйста, увеличьте размер шага." << std::endl;
+        while (pointCount > 100000) {
+            std::cout
+                << "Слишком много точек для построения таблицы. Пожалуйста, увеличьте размер шага." << std::endl;
+
             xDelta = getInput("xDelta");
 
-            pointCount = std::abs((xEnd - xStart) / xDelta) + 1.0;
-
-            if (pointCount < 100000) {
-                break;
+            if ((xEnd > xStart && xDelta <= 0) ||
+                (xEnd < xStart && xDelta >= 0)) {
+                std::cout
+                    << "Знак шага не соответствует направлению диапазона."
+                    << std::endl;
+                continue;
             }
+
+            pointCount = std::abs((xEnd - xStart) / xDelta) + 1.0;
         }
 
 
