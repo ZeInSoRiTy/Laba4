@@ -30,6 +30,7 @@ int main()
 
         if (input == "1" || input == "2") {
             calcMode = std::stoi(input);
+            std::cout << "\n";
             break;
         }
 
@@ -37,8 +38,46 @@ int main()
     
     xStart = getInput("xStart");
     xEnd = getInput("xEnd");
+
+    if (xStart == xEnd) {
+        while (true) {
+            std::cout << "Диапазон значений пуст, пожалуйста введите другое значение xEnd." << std::endl << std::endl;
+            xEnd = getInput("xEnd");
+
+            if (xStart != xEnd) {
+                break;
+            }
+        }
+    }
+
+
+
     xDelta = getInput("xDelta");
+
+    if (xEnd < xStart && xDelta >= 0) {
+        while (true) {
+            std::cout << "Так как конечный x меньше чем начальный x, шаг должен быть отрицательным. Пожалуйста, введите другое значение ∆X." << std::endl << std::endl;
+            xDelta = getInput("xDelta");
+
+            if (xDelta < 0) {
+                break;
+            }
+        }
+    }
+
+    if (xEnd > xStart && xDelta <= 0) {
+        while (true) {
+            std::cout << "Так как конечный x больше чем начальный x, шаг должен быть положительным. Пожалуйста, введите другое значение ∆X." << std::endl << std::endl;
+            xDelta = getInput("xDelta");
+
+            if (xDelta < 0) {
+                break;
+            }
+        }
+    }
+
     eps = getInput("epsilon");
+
 
     std::cout << xStart << xEnd << xDelta << eps;
 

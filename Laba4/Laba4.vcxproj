@@ -143,7 +143,6 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Laba1\Laba1\Laba1.cpp" />
     <ClCompile Include="InputData.cpp" />
     <ClCompile Include="Laba4.cpp" />
     <ClCompile Include="Validation.cpp" />
