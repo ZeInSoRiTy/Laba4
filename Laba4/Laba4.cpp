@@ -30,11 +30,14 @@ double recurrentFunc(double x, double eps) {
 
         double nextTerm = (-prevTerm * pow(x, 2.0) * (pow(9.0, n + 1.0) - 1.0)) / ((pow(9.0, n) - 1.0) * (2.0 * n + 2.0) * (2.0 * n + 3.0));
 
-		if (std::abs(nextTerm) < eps) {
-			break;
-		}
+        double nextSum = recurSum + nextTerm;
 
-        recurSum += nextTerm;
+        if (std::abs(nextSum - recurSum) < eps) {
+            recurSum = nextSum;
+            break;
+        }
+
+        recurSum = nextSum;
 		prevTerm = nextTerm;
         ++n;
     }
@@ -124,8 +127,10 @@ int main()
 
             double FLib = pow(sin(x), 3);
 			double FRecur = recurrentFunc(x, eps);
-			double delta = std::abs(FLib - FRecur);
+            double delta = std::sqrt(std::abs((pow(FRecur, 2) - pow(FLib, 2))));
 
+            std::cout << std::format("| {:>5} | {:>9} | {:>7} | {:>9} |", x, FRecur, FLib, delta) << std::endl; // Форматирование шапки таблицы и значений
+            std::cout << std::string(43, '—') << std::endl;
 
             // Вызов функции для расчета по диапазону X
         }
