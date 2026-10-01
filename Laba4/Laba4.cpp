@@ -11,8 +11,6 @@
 
 int main()
 {
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
 
     std::setlocale(LC_NUMERIC, "C");
 
