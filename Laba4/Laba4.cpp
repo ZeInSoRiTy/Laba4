@@ -195,6 +195,20 @@ int main()
             }
         }
 
+        double pointCount = std::abs((xEnd - xStart) / xDelta) + 1.0;
+
+        if (pointCount > 100000) {
+            std::cout << "Слишком много точек для построения таблицы. Пожалуйста, увеличьте размер шага." << std::endl;
+            xDelta = getInput("xDelta");
+
+            pointCount = std::abs((xEnd - xStart) / xDelta) + 1.0;
+
+            if (pointCount < 100000) {
+                break;
+            }
+        }
+
+
         eps = getInput("epsilon");
 
         const std::array<std::string, 4> headers{ "x", "f(x)", "F(x)", "delta" };
@@ -209,13 +223,6 @@ int main()
                 x = xEnd;
             }
             
-            const double pointCount = std::abs((xEnd - xStart) / xDelta) + 1.0;
-
-            if (pointCount > 100000) {
-                std::cout << "Слишком много точек для построения таблицы." << std::endl;
-                break;
-            }
-
             if (xDelta > 0.0) {
                 if (x > xEnd + toler) {
                     break;
@@ -254,6 +261,7 @@ int main()
 
         const double xIdeal = getInput("xIdeal");
         double FLib = std::pow(std::sin(xIdeal), 3.0);
+
 
         std::vector<TableRow> rows;
 

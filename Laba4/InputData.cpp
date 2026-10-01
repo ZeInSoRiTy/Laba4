@@ -38,7 +38,7 @@ double getInput(const std::string& inputType) {
 			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
 			continue;
 		}
-		if ((inputType == "xIdeal") && std::abs(res) > 10000) {
+		if ((inputType == "xIdeal") && std::abs(res) > 5000) {
 			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
 			continue;
 		}
