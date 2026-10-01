@@ -35,6 +35,6 @@ std::string inputMsg(const std::string& inputType) {
 		return "Введите значение шага ∆X: ";
 	}
 	if (inputType == "epsilon") {
-		return "Введите значение точности ε: ";
+		return "Введите значение точности eps: ";
 	}
 }

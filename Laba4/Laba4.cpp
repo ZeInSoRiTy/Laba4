@@ -11,8 +11,13 @@
 
 int main()
 {
+    SetConsoleCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
+
     setlocale(LC_ALL, "ru");
     std::setlocale(LC_NUMERIC, "C");
+
+
     int calcMode = 1;
     double xStart;
     double xEnd;
@@ -20,7 +25,7 @@ int main()
     double eps;
 
     while (true) {
-        std::cout << "Выберите:\n1.Таблица по диапазону X\n2.Таблица по диапазону ε" << std::endl;
+        std::cout << "Меню:\n1.Таблица по диапазону X\n2.Таблица по диапазону eps\n\nВаш выбор: ";
 
         std::string input;
         if (!std::getline(std::cin, input)) break;
