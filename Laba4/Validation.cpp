@@ -34,7 +34,9 @@ ValidationError validate(const std::string& input) {
     catch (const std::out_of_range&) {
         return ValidationError::OutOfRange;
     }
-
+    catch (const std::invalid_argument&) {
+        return ValidationError::InvalidChars;
+    }
     return ValidationError::None;
 }
 

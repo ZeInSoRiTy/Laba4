@@ -41,7 +41,7 @@ double recurrentFunc(double x, double eps) {
             break;
         }
 
-        if (std::abs(nextSum - recurSum) < eps) {
+        if (std::abs(nextSum - recurSum) <= eps) {
             recurSum = nextSum;
             break;
         }
@@ -244,12 +244,26 @@ int main()
             double FRecur = recurrentFunc(x, eps);
             double delta = std::sqrt(std::abs((std::pow(FRecur, 2.0) - std::pow(FLib, 2.0))));
 
+            std::string deltaInsert;
+            std::string FRecInsert;
+            std::string FLibInsert;
+
+            if (!std::isfinite(delta)) {
+                deltaInsert = "-N/A-";
+                FRecInsert = "-N/A-";
+                FLibInsert = "-N/A-";
+            }
+            else {
+                deltaInsert = std::format("{:.6f}", delta);
+                FRecInsert = std::format("{:.6f}", FRecur);
+                FLibInsert = std::format("{:.6f}", FLib);
+            }
 
             rows.push_back({
-                std::format("{}", x),
-                std::format("{}", FRecur),
-                std::format("{}", FLib),
-                std::format("{}", delta)
+                std::format("{:.6f}", x),
+                std::format("{}", FRecInsert),
+                std::format("{}", FLibInsert),
+                std::format("{}", deltaInsert)
                 });
         }
 
@@ -280,11 +294,27 @@ int main()
 
             double delta = std::sqrt(std::abs((std::pow(FRecur, 2.0) - std::pow(FLib, 2.0))));
 
+            std::string deltaInsert;
+            std::string FRecInsert;
+            std::string FLibInsert;
+
+            if (!std::isfinite(delta)) {
+                deltaInsert = "-N/A-";
+                FRecInsert = "-N/A-";
+                FLibInsert = "-N/A-";
+
+            }
+            else {
+                deltaInsert = std::format("{:.6f}", delta);
+                FRecInsert = std::format("{:.6f}", FRecur);
+                FLibInsert = std::format("{:.6f}", FLib);
+            }
+
             rows.push_back({
                 std::format("{:.{}f}", currentEpsilon, power),
-                std::format("{}", FRecur),
-                std::format("{}", FLib),
-                std::format("{}", delta)
+                std::format("{}", FRecInsert),
+                std::format("{}", FLibInsert),
+                std::format("{}", deltaInsert)
                 });
         }
 

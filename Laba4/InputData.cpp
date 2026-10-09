@@ -3,6 +3,8 @@
 #include <regex>
 #include <stdexcept>
 #include <iostream>
+#include <cstdlib>
+#include <cmath>
 #include <Windows.h>
 
 double getInput(const std::string& inputType) {
@@ -34,8 +36,8 @@ double getInput(const std::string& inputType) {
 		
 		double res = std::stod(input);
 
-		if ((inputType == "xStart" || inputType == "xEnd" || inputType == "xDelta") && std::abs(res) > 10000000) {
-			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
+		if ((inputType == "xStart" || inputType == "xEnd" || inputType == "xDelta") && std::abs(res) > 1000000) {
+			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше в диапазоне до миллиона, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
 			continue;
 		}
 		if ((inputType == "xIdeal") && std::abs(res) >= 122) {
