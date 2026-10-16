@@ -36,17 +36,17 @@ double getInput(const std::string& inputType) {
 		
 		double res = std::stod(input);
 
-		if ((inputType == "xStart" || inputType == "xEnd" || inputType == "xDelta") && std::abs(res) > 1000000) {
-			std::cout << "Введите ну уж слишком большое число. Пожалуйста введите меньше в диапазоне до миллиона, чтобы мой ноутбук не взорвался при проверке :(" << std::endl << std::endl;
+		if ((inputType == "xStart" || inputType == "xEnd" || inputType == "xDelta") && (std::abs(res) > 10000 || std::abs(res) < 0.000001)) {
+			std::cout << "Для подобной функции данное значение излишне большое и уведет ее в бесконечность или излишне маленькое. Пожалуйста введите значение не больше 10000, а лучше в диапазоне от -5 до 5, так как это гарантирует устойчивость функции." << std::endl << std::endl;
 			continue;
 		}
-		if ((inputType == "xIdeal") && std::abs(res) >= 122) {
-			std::cout << "Введите ну уж слишком большое число для подобной функции" << std::endl << std::endl;
+		if ((inputType == "xIdeal") && (std::abs(res) >= 122 || std::abs(res) < 0.000001)) {
+			std::cout << "Для подобной функции данное значение излишне большое и уведет ее в бесконечность или излишне маленькое. Пожалуйста введите значение менее 122, а лучше в диапазоне от -5 до 5, так как это гарантирует устойчивость функции." << std::endl << std::endl;
 			continue;
 		}
 
-		if ((inputType == "xDelta") && res == 0) {
-			std::cout << "∆X не может быть равен 0." << std::endl << std::endl;
+		if ((inputType == "xDelta") && (res == 0 || std::abs(res) < 0.000001)) {
+			std::cout << "∆X не может быть равен 0 и должен быть более 0.000001." << std::endl << std::endl;
 			continue;
 		}
 
